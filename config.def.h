@@ -48,7 +48,7 @@ static Sp scratchpads[] = {
 
 /* tagging */
 // static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *tags[] = { "", "", "", "", "",  "", "", "", "", "" };
+static const char *tags[] = { "", "", "", "", "", "", "","", "", ""  };
 
 static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
@@ -104,6 +104,10 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu-run", NULL };
 static const char *termcmd[]  = { "st", NULL };
+// static const char *emacs[]  = { "emacsclient -c -a 'emacs'", NULL };
+
+/* Constants */
+#define EMACS "emacsclient -c -a 'emacs'"
 
 #include <X11/XF86keysym.h>
 static const Key keys[] = {
@@ -111,7 +115,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
     { MODKEY,                       XK_w,      killclient,     {0} },
-	
+
     // Change window sizes
     { MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
@@ -121,10 +125,10 @@ static const Key keys[] = {
     // Move windows in current stack
     { MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      rotatestack,    {.i = -1 } },
- 
+
     // Toggle bar
 	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
-    
+
     // Switch between windows
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -170,23 +174,24 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-    
+
     // Restart or quit dwm 
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask, XK_r,       quit,                      {1} }, 
-    
+
     // Apps
     { MODKEY,                       XK_b, spawn, SHCMD("firefox") },
     { MODKEY,                       XK_a, spawn, SHCMD("pcmanfm") },
-    { MODKEY,                       XK_p,  spawn, SHCMD("passmenu -p \"Pass: \"")},
+    { MODKEY,                       XK_p, spawn, SHCMD("passmenu -p \"Pass: \"")},
     { MODKEY,                       XK_r, spawn, SHCMD("redshift -O 2400") },
     { MODKEY|ShiftMask,             XK_r, spawn, SHCMD("redshift -x") },
-    
+    { MODKEY,                       XK_e, spawn, SHCMD(EMACS "--eval '(dashboard-refresh-buffer)'" ) },
+
      // Volume
     {0, XF86XK_AudioLowerVolume,    spawn, SHCMD("volume down")},
     {0, XF86XK_AudioRaiseVolume,    spawn, SHCMD("volume up")},
     {0, XF86XK_AudioMute,           spawn, SHCMD("volume mute")},
-    
+
     // My scripts
     { MODKEY,                       XK_F2,     spawn,          SHCMD("xwallpapers") },
     { ShiftMask,                    XK_F2,     spawn,          SHCMD("passmenu") },
