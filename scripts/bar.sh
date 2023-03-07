@@ -1,13 +1,23 @@
-#!/bin/sh
+#!/bin/env sh
 
 # ^c$var^ = fg color
 # ^b$var^ = bg color
+# set -euo pipefail
 
 interval=0
 
+# Themes
+# catppuccin  
+# dracula  
+# gruvchad  
+# nord  
+# onedark
+
+THEME="$HOME/repos/dwm/scripts/bar_themes/catppuccin"
+
 # load colors
-if [ -f "$HOME/repos/dwm/scripts/bar_themes/catppuccin" ]; then
-. ~/repos/dwm/scripts/bar_themes/catppuccin
+if [ -f $THEME ]; then
+. $THEME
 else
     echo "theme file not found" && exit 1
 fi
@@ -31,14 +41,17 @@ pkg_updates() {
 }
 
 battery() {
-  if [ -f  /sys/class/power_supply/BAT1/capacity ];then 
-  BAT=BAT1
-  else
-  BAT=BAT0
-  fi
-  get_capacity="$(cat /sys/class/power_supply/$BAT/capacity)"
-  get_status="$(cat /sys/class/power_supply/$BAT/status)"
+#Check if BAT0 exists
+if [ -f "/sys/class/power_supply/BAT0/capacity" ] && [ -f "/sys/class/power_supply/BAT0/status" ]; then
+get_capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+get_status=$(cat /sys/class/power_supply/BAT0/status)
 
+#If not, check BAT1
+elif [ -f "/sys/class/power_supply/BAT1/capacity" ] && [ -f "/sys/class/power_supply/BAT1/status" ]; then
+get_capacity=$(cat /sys/class/power_supply/BAT1/capacity)
+get_status=$(cat /sys/class/power_supply/BAT1/status)
+fi
+  # Set battery icon based on capacity and status 
   if [ "$get_status" == "Discharging" ];then
     if (($get_capacity>98))
         then
